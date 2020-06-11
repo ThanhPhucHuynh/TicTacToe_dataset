@@ -3,7 +3,7 @@ import pandas as pd
 
 from sklearn.tree import plot_tree
 
-
+# read data from file csv
 df = pd.read_csv('tic-tac-toe.data',
         names = ["V1", "V2", "V3", "V4", "V5", "V6", 
                                     "V7", "V8", "V9", "V10"],
