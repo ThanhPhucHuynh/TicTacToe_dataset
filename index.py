@@ -93,7 +93,12 @@ feature_names = ['V1','V2','V3','V4', 'V5', 'V6', 'V7', 'V8', 'V9']
 x = df[feature_names] # Features
 y = df['V10'] # lables
 # print(x,y)
-
+# from sklearn.model_selection import train_test_split
+# df = df.sample(frac=1) # shuffle data
+# df_dev, df_test = train_test_split(df, test_size=0.15)
+# print(df_dev)
+# print(df_test)
+# df_train, df_valid = train_test_split(df_dev, test_size=0.15)
 
  
 from IPython.display import Image
@@ -122,12 +127,16 @@ from sklearn.tree import DecisionTreeClassifier
 # print(clf)
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=5,shuffle=True)
+x_train_or, x_test, y_train_or, y_test = train_test_split(x, y, test_size=0.3, random_state=5,shuffle=True)
+
+x_train, x_val, y_train, y_val = train_test_split(x_train_or, y_train_or, test_size=0.15, random_state=5,shuffle=True)
+
+
 
 # print(x_train,y_train,x_test,y_test)
 
 # clf = DecisionTreeClassifier(criterion='entropy', min_samples_split=80) # change this classifier and check the impact
-clf = DecisionTreeClassifier()
+clf = DecisionTreeClassifier(criterion="entropy")
 clf = clf.fit(x_train,y_train)
 plot_decision_tree(clf, feature_names, className)
 
@@ -142,6 +151,7 @@ count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples (Mau phan loai sai): {}'.format(count_misclassified))
 accuracy = metrics.accuracy_score(y_test, y_pred)
 print('Accuracy: {:.2f}'.format(accuracy))
+print('Accuracy VA L: {:.2f}'.format(metrics.accuracy_score(y_val,clf.predict(x_val))))
 print("DTC report: \n",classification_report(y_test,y_pred))
 
 
@@ -160,6 +170,10 @@ from sklearn.naive_bayes import MultinomialNB
 
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=5,shuffle = True)
+
+x_train, x_val, y_train, y_val = train_test_split(x_train_or, y_train_or, test_size=0.15, random_state=5,shuffle=True)
+
+
 clf_NB = GaussianNB()
 
 clf_NB = clf_NB.fit(x_train,y_train)
@@ -170,6 +184,7 @@ from sklearn.metrics import confusion_matrix
 cnf_matrix_gnb = confusion_matrix(thucte,dubao)
 print(cnf_matrix_gnb)
 print('accuracy = ',metrics.accuracy_score(thucte, dubao))
+print('Accuracy VA L: {:.2f}'.format(metrics.accuracy_score(y_val,clf_NB.predict(x_val))))
 print("Naive Bayes algoritması\n",classification_report(thucte,dubao))
 print("Anticipate: [2, 2, 1, 2, 1, 0, 1, 0, 0] \nAnd         [2, 2, 2, 1, 1, 0, 1, 0, 0]")
 
